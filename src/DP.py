@@ -156,9 +156,13 @@ if __name__ == "__main__":
     script_dir = os.path.dirname(os.path.abspath(__file__))
     root_dir = os.path.dirname(script_dir)
     
-    nama_file = input("Masukkan nama file CSV yang ada di folder 'data' (contoh: data.csv): ")
-    file_path = os.path.join(root_dir, 'data', nama_file)
+    # Default path: data/data.csv
+    file_path = os.path.join(root_dir, 'data', 'data.csv')
     
+    if not os.path.exists(file_path):
+        nama_file = input("Masukkan nama file CSV Anda (contoh: data.csv): ")
+        file_path = os.path.join(root_dir, 'data', nama_file)
+        
     if os.path.exists(file_path):
         try:
             node_awal = int(input("Masukkan titik node untuk memulai perjalanan: "))
