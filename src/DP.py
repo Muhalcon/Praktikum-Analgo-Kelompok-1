@@ -82,14 +82,17 @@ def solve_hamiltonian_path_dp_undirected(file_path, start_node, harga_bensin):
     # Menghitung Biaya BBM
     rincian_perjalanan = []
     total_biaya_bbm = 0
+    total_barang = n - 1 
     current_barang = total_barang
     
     for i in range(len(path) - 1):
         u = path[i]
         v = path[i+1]
         
-        current_barang -= u  
-        rasio_bbm_rute = 0.05 * current_barang
+        if total_barang > 0:
+            rasio_bbm_rute = 0.02 + (current_barang / total_barang) * (0.05 - 0.02)
+        else:
+            rasio_bbm_rute = 0.02
         
         u_idx = node_to_idx[u]
         v_idx = node_to_idx[v]
@@ -105,6 +108,9 @@ def solve_hamiltonian_path_dp_undirected(file_path, start_node, harga_bensin):
             'barang_dibawa': current_barang, 
             'biaya': biaya_rute
         })
+        
+        if current_barang > 0:
+            current_barang -= 1
     
     return min_dist, path, total_barang, rincian_perjalanan, total_biaya_bbm
 
@@ -150,9 +156,13 @@ if __name__ == "__main__":
     script_dir = os.path.dirname(os.path.abspath(__file__))
     root_dir = os.path.dirname(script_dir)
     
-    nama_file = input("Masukkan nama file CSV yang ada di folder 'data' (contoh: data.csv): ")
-    file_path = os.path.join(root_dir, 'data', nama_file)
+    # Default path: data/data.csv
+    file_path = os.path.join(root_dir, 'data', 'data.csv')
     
+    if not os.path.exists(file_path):
+        nama_file = input("Masukkan nama file CSV Anda (contoh: data.csv): ")
+        file_path = os.path.join(root_dir, 'data', nama_file)
+        
     if os.path.exists(file_path):
         try:
             node_awal = int(input("Masukkan titik node untuk memulai perjalanan: "))
